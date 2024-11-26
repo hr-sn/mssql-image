@@ -1,0 +1,36 @@
+docker run -d -p 1433:1433 --name mySql -m 2048M -v c:\temp:c:\users\public\downloads windows-core-with-sql-is
+
+docker inspect --format '{{.NetworkSettings.Networks.nat.IPAddress}}' mySql
+
+
+$conn = "Data Source=localhost;Initial Catalog=master;Integrated Security=True;encrypt=false"
+$connsa1 = "Server=localhost;Database=master;User Id=sa1;Password=$up3r$3cr3t25808;encrypt=false"
+
+$connsa1 = "Server=172.30.21.193,1433;Database=master;User Id=sa1;Password=$up3r$3cr3t25808;encrypt=false"
+
+ALTER LOGIN sa WITH PASSWORD = '$up3r$3cr3t25808' CHECK_POLICY = OFF;
+
+Invoke-Sqlcmd -ConnectionString:$conn -Query:"CREATE LOGIN sa1 WITH PASSWORD='$up3r$3cr3t25808', CHECK_POLICY=OFF,CHECK_EXPIRATION=OFF;" 
+
+Invoke-Sqlcmd -ConnectionString:$conn -Query:"ALTER LOGIN sa WITH PASSWORD = '$up3r$3cr3t25808', CHECK_POLICY = OFF"
+
+Invoke-Sqlcmd -ConnectionString:$conn -Query:"ALTER LOGIN sa WITH CHECK_POLICY = OFF"
+
+172.30.28.5,1433
+
+Invoke-Sqlcmd -ConnectionString:$conn -Query:"select * from sys.databases where [name] = 'capital_dw'"
+Invoke-Sqlcmd -ConnectionString:$connsa1 -Query:"select * from sys.databases"
+
+Invoke-Sqlcmd -ConnectionString:$conn -Query:"select count(*) from capital_dw.information_schema.tables"
+
+Invoke-Sqlcmd -ConnectionString:$conn -Query:"sp_Configure @Configname=clr_enabled,@configvalue=1;"
+Invoke-Sqlcmd -ConnectionString:$conn -Query:"RECONFIGURE"
+& sqlcmd /S localhost -Q "sp_Configure @Configname=clr_enabled,@configvalue=1;"
+
+$sqlConnection = New-Object System.Data.SqlClient.SqlConnection $conn
+$integrationServices = New-Object $ISNamespace".IntegrationServices" $sqlConnection
+
+$catalog = New-Object $ISNamespace".Catalog" ($integrationServices, "SSISDB", "P@assword1")  
+$catalog.Create() 
+
+docker exec -it mySql powershell

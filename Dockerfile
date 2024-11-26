@@ -1,26 +1,26 @@
 # escape=`
-ARG BASE
+ARG BASE="ltsc2019"
 FROM mcr.microsoft.com/dotnet/framework/runtime:4.8-windowsservercore-$BASE
 
-ARG DEV_ISO= `
+ARG DEV_ISO="https://download.microsoft.com/download/7/c/1/7c14e92e-bdcb-4f89-b7cf-93543e7112d1/SQLServer2019-x64-ENU-Dev.iso" `
     EXP_EXE= `
-    CU= `
-    VERSION=`
+    CU="https://download.microsoft.com/download/6/e/7/6e72dddf-dfa4-4889-bc3d-e5d3a0fd11ce/SQLServer2019-KB5046365-x64.exe" `
+    VERSION="15.0.4405.4" `
     TYPE=
 ENV DEV_ISO=$DEV_ISO `
     EXP_EXE=$EXP_EXE `
     CU=$CU `
     VERSION=$VERSION `
-    sa_password="_" `
+    sa_password="ChangeHave2024!@" `
     attach_dbs="[]" `
-    accept_eula="_" `
+    accept_eula="Y" `
     sa_password_path="C:\ProgramData\Docker\secrets\sa-password" `
     before_startup="C:\before-startup" `
     after_startup="C:\after-startup"
 
-LABEL org.opencontainers.image.authors="Tobias Fenster (https://tobiasfenster.io)"
-LABEL org.opencontainers.image.source="https://github.com/tfenster/mssql-image"
-LABEL org.opencontainers.image.description="An unofficial, unsupported and in no way connected to Microsoft container image for MS SQL Server"
+LABEL org.opencontainers.image.authors="Harish Saini"
+LABEL org.opencontainers.image.source="https://github.com/hr-sn/mssql-image"
+LABEL org.opencontainers.image.description="An unofficial, unsupported and in no way connected to Microsoft container image for MS SQL Server (forked from tobiasfenster)"
 LABEL org.opencontainers.image.version=$VERSION-$TYPE
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
@@ -29,7 +29,7 @@ USER ContainerAdministrator
 RUN $ProgressPreference = 'SilentlyContinue'; `
     Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1')); `
     choco feature enable -n allowGlobalConfirmation; `
-    choco install --no-progress --limit-output vim 7zip sqlpackage; `
+    choco install --no-progress --limit-output vim 7zip sqlpackage pester; `
     Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1; `
     refreshenv;
 
@@ -37,7 +37,7 @@ RUN if (-not [string]::IsNullOrEmpty($env:DEV_ISO)) { `
         Invoke-WebRequest -UseBasicParsing -Uri $env:DEV_ISO -OutFile c:\SQLServer.iso; `
         mkdir c:\installer; `
         7z x -y -oc:\installer .\SQLServer.iso; `
-        .\installer\setup.exe /q /ACTION=Install /INSTANCENAME=MSSQLSERVER /FEATURES=SQLEngine /UPDATEENABLED=0 /SQLSVCACCOUNT='NT AUTHORITY\NETWORK SERVICE' /SQLSYSADMINACCOUNTS='BUILTIN\ADMINISTRATORS' /TCPENABLED=1 /NPENABLED=0 /IACCEPTSQLSERVERLICENSETERMS; `
+        .\installer\setup.exe /q /ACTION=Install /INSTANCENAME=MSSQLSERVER /FEATURES=SQLEngine,IS /UPDATEENABLED=0 /SQLSVCACCOUNT='NT AUTHORITY\NETWORK SERVICE' /SQLSYSADMINACCOUNTS='BUILTIN\ADMINISTRATORS' /TCPENABLED=1 /NPENABLED=0 /IACCEPTSQLSERVERLICENSETERMS; `
         remove-item c:\SQLServer.iso -ErrorAction SilentlyContinue; `
         remove-item -recurse -force c:\installer -ErrorAction SilentlyContinue; `
     }
@@ -45,7 +45,7 @@ RUN if (-not [string]::IsNullOrEmpty($env:DEV_ISO)) { `
 RUN if (-not [string]::IsNullOrEmpty($env:EXP_EXE)) { `
         Invoke-WebRequest -UseBasicParsing -Uri $env:EXP_EXE -OutFile c:\SQLServerExpress.exe; `
         Start-Process -Wait -FilePath .\SQLServerExpress.exe -ArgumentList /qs, /x:installer ; `
-        .\installer\setup.exe /q /ACTION=Install /INSTANCENAME=SQLEXPRESS /FEATURES=SQLEngine /UPDATEENABLED=0 /SQLSVCACCOUNT='NT AUTHORITY\NETWORK SERVICE' /SQLSYSADMINACCOUNTS='BUILTIN\ADMINISTRATORS' /TCPENABLED=1 /NPENABLED=0 /IACCEPTSQLSERVERLICENSETERMS; `
+        .\installer\setup.exe /q /ACTION=Install /INSTANCENAME=SQLEXPRESS /FEATURES=SQLEngine,IS /UPDATEENABLED=0 /SQLSVCACCOUNT='NT AUTHORITY\NETWORK SERVICE' /SQLSYSADMINACCOUNTS='BUILTIN\ADMINISTRATORS' /TCPENABLED=1 /NPENABLED=0 /IACCEPTSQLSERVERLICENSETERMS; `
         remove-item c:\SQLServerExpress.exe -ErrorAction SilentlyContinue; `
         remove-item -recurse -force c:\installer -ErrorAction SilentlyContinue; `
     } 

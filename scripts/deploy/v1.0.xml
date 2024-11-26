@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<version_history>
+		<![CDATA[
+		Version		Date		Author			Comments
+		 1.0		20241113	H Saini			Created
+		]]>
+	</version_history>
+	<settings>
+		<sourcefolder_ispac comments="Leave blank if not deploying ispac">C:\CodeCave\inter\</sourcefolder_ispac>
+		<ispac_sln comments="List SSIS solutions, this is required and DONOT use *.sln. CSV is okay">SLN-Capital.sln</ispac_sln>
+		<ispac_filter comments="ispac files to be copied, ex. PRJ-STG-1.ispac, PRJ-STG-2.ispac or *.ispac">*.ispac</ispac_filter>
+		<sourcefolder_dacpac comments="Leave blank if not deploying dacpac"></sourcefolder_dacpac>
+		<dacpac_sln comments="List Database solutions, this is required and DONOT use *.sln; CSV is okay">SLN-BI-Database.sln</dacpac_sln>		
+		<dacpac_filter comments="dacpac files to be copied, ex. BI_Control.dacpac, BI_Log.dacpac or *.dacpac">*.dacpac</dacpac_filter>
+	</settings>
+	<deployment_notes>
+		<![CDATA[
+		1. First deployment
+		]]>
+	</deployment_notes>
+</root>

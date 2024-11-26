@@ -1,0 +1,37 @@
+docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=V#ry$ecure1" \
+   -p 1433:1433 --name sql1 --hostname sql1 \
+   -d \
+   mcr.microsoft.com/mssql/server:2022-latest
+   
+   
+docker run -d -p 1433:1433 -e "MSSQL_SA_PASSWORD=$up3r$3cr3t" -e ACCEPT_EULA=Y –name mySqlServerContainer2 -m 2048M -v D:\docker\install:c:\temp\sqlinstall microsoft/mssql-server-windows-developer
+
+
+docker run -it --isolation=hyperv mcr.microsoft.com/windows/servercore
+
+## list docker containers
+docker -ps -a 
+
+docker pull mcr.microsoft.com/windows/servercore:ltsc2019
+
+docker run -d -p 1433:1433 --name mySql -m 2048M -v c:\temp\:c:\users\public\downloads mcr.microsoft.com/windows/servercore:ltsc2019 ping localhost -t
+
+docker run -d -p 1433:1433 --name mySql -m 2048M windows-core-with-sql-is
+
+c:\temp\sqlinstall:c:\users\public\downloads
+
+docker exec -it mySql powershell 
+
+$Secure = Read-Host -AsSecureString
+$up3r$3cr3t25808
+
+docker inspect --format '{{.Id}}' epic_goldberg
+09720f33724d7a637e88408ad00032b9bd702b940f98efd33d9a230875b90657
+docker inspect --format '{{.NetworkSettings.Networks.nat.IPAddress}}' mySql-with-IS
+
+
+$Secure = Read-Host -AsSecureString
+$up3r$3cr3t9436@1!
+
+./setup.exe /Q /SUPPRESSPRIVACYSTATEMENTNOTICE /IACCEPTSQLSERVERLICENSETERMS /ACTION="install" /FEATURES=SQL,IS /INSTANCENAME=MSSQLSERVER /SECURITYMODE=SQL /SAPWD=$Secure /SQLSYSADMINACCOUNTS='BUILTIN\ADMINISTRATORS' /SQLSVCACCOUNT="NT Service\MSSQLSERVER" /AGTSVCACCOUNT="NT Service\SQLSERVERAGENT" /ISSVCACCOUNT="NT Service\MsDtsServer160" /SQLSVCSTARTUPTYPE="Automatic" /ISSVCSTARTUPTYPE="Automatic"  /TCPENABLED=1 /INDICATEPROGRESS
+
